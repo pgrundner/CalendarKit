@@ -324,21 +324,53 @@ public class TimelineView: UIView, ReusableView {
         groupsOfEvents.append(overlappingEvents)
         overlappingEvents = [event]
     }
-
-    groupsOfEvents.append(overlappingEvents)
+    let sortedEventGroup = overlappingEvents.sorted { (attr1, attr2) -> Bool in
+        let period1 = attr2.descriptor.datePeriod.seconds
+        let period2 = attr2.descriptor.datePeriod.seconds
+        print ("\(period1) > \(period2)")
+        return period1 > period2
+    }
+    
+    groupsOfEvents.append(sortedEventGroup)
     overlappingEvents.removeAll()
 
-    for overlappingEvents in groupsOfEvents {
-      let totalCount = CGFloat(overlappingEvents.count)
-      for (index, event) in overlappingEvents.enumerated() {
-        let startY = dateToY(event.descriptor.datePeriod.beginning!)
-        let endY = dateToY(event.descriptor.datePeriod.end!)
-        let floatIndex = CGFloat(index)
-        let x = style.leftInset + floatIndex / totalCount * calendarWidth
-        let equalWidth = calendarWidth / totalCount
-        event.frame = CGRect(x: x, y: startY, width: equalWidth, height: endY - startY)
+    for overlappingEventGroup in groupsOfEvents {
+      var columns:[[EventLayoutAttributes]] = [[]]
+        for (_, event) in overlappingEventGroup.enumerated() {
+            print ("Event: \(event.description)")
+            var placed = false
+            if columns.count == 0 {
+                columns.append([event])
+                placed = true
+                continue
+            }
+            for (index, column) in columns.enumerated() {
+                if !placed, !(column.last?.descriptor.intersetcs(with: event.descriptor) ?? false) {
+                    var newColumn = column
+                    newColumn.append(event)
+                    columns[index] = newColumn
+                    placed = true
+                    continue
+                }
+            }
+            if !placed {
+                columns.append([event])
+                placed = true
+                continue
+            }
+        }
+        var idx = 0
+        for column in columns {
+            idx += 1
+            let x = style.leftInset + (calendarWidth - CGFloat(idx) * (calendarWidth / CGFloat(columns.count)))
+            let equalWidth = calendarWidth / CGFloat(columns.count)
+            for event in column {
+                let startY = dateToY(event.descriptor.datePeriod.beginning!)
+                let endY = dateToY(event.descriptor.datePeriod.end!)
+                event.frame = CGRect(x: x, y: startY, width: equalWidth, height: endY - startY)
+            }
+        }
       }
-    }
   }
 
   func prepareEventViews() {

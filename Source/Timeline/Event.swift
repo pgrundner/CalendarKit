@@ -19,4 +19,15 @@ open class Event: EventDescriptor {
   public var font = UIFont.boldSystemFont(ofSize: 12)
   public var userInfo: Any?
   public init() {}
+  
+    public var interval:DateInterval {
+        return DateInterval(start: startDate, end: endDate)
+    }
+
+    public func intersetcs(with event: EventDescriptor) -> Bool {
+        if let intersection = interval.intersection(with: event.interval) {
+            return intersection.duration > 0.0
+        }
+        return false
+    }
 }

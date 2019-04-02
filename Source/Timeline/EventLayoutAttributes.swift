@@ -7,4 +7,8 @@ public class EventLayoutAttributes {
   public init(_ descriptor: EventDescriptor) {
     self.descriptor = descriptor
   }
+    
+    public var description:String {
+        return "\(descriptor.text): \(descriptor.startDate) - \(descriptor.endDate)"
+    }
 }

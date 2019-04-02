@@ -10,4 +10,6 @@ public protocol EventDescriptor {
   var color: UIColor {get}
   var textColor: UIColor {get}
   var backgroundColor: UIColor {get}
+  var interval:DateInterval {get}
+  func intersetcs(with event: EventDescriptor) -> Bool;
 }
