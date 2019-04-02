@@ -324,19 +324,13 @@ public class TimelineView: UIView, ReusableView {
         groupsOfEvents.append(overlappingEvents)
         overlappingEvents = [event]
     }
-    let sortedEventGroup = overlappingEvents.sorted { (attr1, attr2) -> Bool in
-        let period1 = attr2.descriptor.datePeriod.seconds
-        let period2 = attr2.descriptor.datePeriod.seconds
-        print ("\(period1) > \(period2)")
-        return period1 > period2
-    }
-    
-    groupsOfEvents.append(sortedEventGroup)
+    groupsOfEvents.append(overlappingEvents)
     overlappingEvents.removeAll()
 
     for overlappingEventGroup in groupsOfEvents {
       var columns:[[EventLayoutAttributes]] = [[]]
-        for (_, event) in overlappingEventGroup.enumerated() {
+        let events = overlappingEventGroup.sorted { $0.descriptor.datePeriod.seconds > $1.descriptor.datePeriod.seconds }
+        for (_, event) in events.enumerated() {
             print ("Event: \(event.description)")
             var placed = false
             if columns.count == 0 {
