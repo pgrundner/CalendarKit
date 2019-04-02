@@ -42,7 +42,9 @@ open class EventView: UIView {
   func configure() {
     clipsToBounds = true
     [tapGestureRecognizer, longPressGestureRecognizer].forEach {addGestureRecognizer($0)}
-
+    layer.cornerRadius = 5.0
+    layer.borderWidth = 1.0
+    layer.borderColor = color.cgColor
     color = tintColor
     addSubview(textView)
   }
@@ -72,19 +74,19 @@ open class EventView: UIView {
 
   override open func draw(_ rect: CGRect) {
     super.draw(rect)
-    let context = UIGraphicsGetCurrentContext()
-    context!.interpolationQuality = .none
-    context?.saveGState()
-    context?.setStrokeColor(color.cgColor)
-    context?.setLineWidth(3)
-    context?.translateBy(x: 0, y: 0.5)
-    let x: CGFloat = 0
-    let y: CGFloat = 0
-    context?.beginPath()
-    context?.move(to: CGPoint(x: x, y: y))
-    context?.addLine(to: CGPoint(x: x, y: (bounds).height))
-    context?.strokePath()
-    context?.restoreGState()
+//    let context = UIGraphicsGetCurrentContext()
+//    context!.interpolationQuality = .none
+//    context?.saveGState()
+//    context?.setStrokeColor(color.cgColor)
+//    context?.setLineWidth(3)
+//    context?.translateBy(x: 0, y: 0.5)
+//    let x: CGFloat = 0.0
+//    let y: CGFloat = 5.0
+//    context?.beginPath()
+//    context?.move(to: CGPoint(x: x, y: y))
+//    context?.addLine(to: CGPoint(x: x, y: (bounds).height - 10.0))
+//    context?.strokePath()
+//    context?.restoreGState()
   }
 
   override open func layoutSubviews() {
