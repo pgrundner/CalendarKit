@@ -331,7 +331,6 @@ public class TimelineView: UIView, ReusableView {
       var columns:[[EventLayoutAttributes]] = [[]]
         let events = overlappingEventGroup.sorted { $0.descriptor.datePeriod.seconds > $1.descriptor.datePeriod.seconds }
         for (_, event) in events.enumerated() {
-            print ("Event: \(event.description)")
             var placed = false
             if columns.count == 0 {
                 columns.append([event])
