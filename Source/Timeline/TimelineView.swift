@@ -329,7 +329,10 @@ public class TimelineView: UIView, ReusableView {
 
     for overlappingEventGroup in groupsOfEvents {
       var columns:[[EventLayoutAttributes]] = [[]]
-        let events = overlappingEventGroup.sorted { $0.descriptor.datePeriod.seconds > $1.descriptor.datePeriod.seconds }
+        let events = overlappingEventGroup.sorted {
+            $0.descriptor.endDate < $1.descriptor.endDate &&
+            $0.descriptor.datePeriod.seconds > $1.descriptor.datePeriod.seconds
+        }
         for (_, event) in events.enumerated() {
             var placed = false
             if columns.count == 0 {
@@ -353,7 +356,7 @@ public class TimelineView: UIView, ReusableView {
             }
         }
         var idx = 0
-        for column in columns {
+        for column in columns.reversed() {
             idx += 1
             let x = style.leftInset + (calendarWidth - CGFloat(idx) * (calendarWidth / CGFloat(columns.count)))
             let equalWidth = calendarWidth / CGFloat(columns.count)
